@@ -21,40 +21,8 @@ public class TextReader {
         this.context = context;
     }
 
-    public float[][] scanCSV_Dep(){
-        float[][] result = new float[48000][2];
-        Scanner scanner = null;
-        //try {
-            //File file = new File("/raw/castanetes.csv");
-            //System.out.println(file.toString());
-            //context.getResources().openRawResource(R.raw.castanetes);
-            scanner = new Scanner(context.getResources().openRawResource(R.raw.castanetes));
 
-        //// } catch (FileNotFoundException e) {
-         //   e.printStackTrace();
-       // }
-        //scanner.useDelimiter(",");
-        scanner.useDelimiter(",|\\n");
-        int linecounter = 0;
-        while(scanner.hasNextLine()){
-            int rowcounter = 0;
-            while(scanner.hasNext()){
-                //System.out.print(scanner.next()+"|");
-                String nexNumber = scanner.next();
-                double parsed =  Double.valueOf(nexNumber);
-                result[linecounter][rowcounter] = (float) parsed;
-                rowcounter ++;
-            }
-            linecounter++;
-        }
-        System.out.println("Read file successfully");
-
-
-        scanner.close();
-        return result;
-    }
-
-    public float[][] scanCSV(){
+    public float[][] scanCSV(){     //currently specified for an float[48000][2] array
 
         InputStream is = null;
         float[][] result = new float[48000][2];
