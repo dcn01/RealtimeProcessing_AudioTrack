@@ -48,7 +48,7 @@ public class AudioThread extends AsyncTask {
         player = new AudioTrack(AudioManager.STREAM_MUSIC, 48000
                 , AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_FLOAT
                 , outputBufferSize, AudioTrack.MODE_STREAM);
-        player.setNotificationMarkerPosition(100 - 1);
+        player.setNotificationMarkerPosition(48000*10-1);
         player.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener() {
 
             @Override
@@ -84,22 +84,13 @@ public class AudioThread extends AsyncTask {
         }
         //Output
         while (running) {
-            //do some work
-//            synchronized (playFinished) {
-//                try {
-                    // Calling wait() will block this thread until another thread
-                    // calls notify() on the object.
+
                     if (playFinished){
+                        player.flush();
                         playOutAudio();
                         Log.v(TAG, "Wait for audio to finish from now.");
                     }
 
-//                    playFinished.wait();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                    // Happens if someone interrupts your thread.
-//                }
-//            }
         }
         System.out.println("Background worker broke up.");
         return null;
@@ -113,12 +104,14 @@ public class AudioThread extends AsyncTask {
 
                 float[] firstCh = this.getDimensionOf2dArray(audioFile, 0);
                 float[] secondCh = this.getDimensionOf2dArray(audioFile, 1);
-//                player.flush();
+                playFinished = false;
+                player.play();          //is it waiting here?
+                player.flush();
+                player.setNotificationMarkerPosition(player.getNotificationMarkerPosition()+48000*10-1);
+
                 player.write(firstCh, 0, audioFile.length, AudioTrack.WRITE_BLOCKING);
                 player.write(secondCh, 0, audioFile.length, AudioTrack.WRITE_BLOCKING);
-                player.play();          //is it waiting here?
                 System.out.println("Start audioOutput");
-                playFinished = false;
             }
             //playFinished.notify();
         //}
