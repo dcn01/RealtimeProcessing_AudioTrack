@@ -25,7 +25,7 @@ public class TextReader {
     public float[][] scanCSV(){     //currently specified for an float[48000][2] array
 
         InputStream is = null;
-        float[][] result = new float[48000][2];
+        float[][] result = new float[48000*10][2];
 
 
         is = context.getResources().openRawResource(R.raw.castanetes);
@@ -39,7 +39,7 @@ public class TextReader {
         try {
 
             int linecounter = 0;
-            while ((line = reader.readLine()) != null && linecounter < 48000) {
+            while ((line = reader.readLine()) != null && linecounter < 48000*10) {
                 st = new StringTokenizer(line, ",");
 
 
