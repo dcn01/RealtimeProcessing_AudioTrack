@@ -4,5 +4,8 @@ public interface IRealtimeProcessing {
 
     public float[][] calculateNextBlock(float[][] audioBlock);
 
-    public  void setFilter(float[][] filter);
+    public  float[][] processNextFilter(float[][] audioData, float[][] filter);
+
+    public void fadeToNextOutput();
+
 }

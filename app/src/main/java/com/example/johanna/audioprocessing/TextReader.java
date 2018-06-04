@@ -1,6 +1,7 @@
 package com.example.johanna.audioprocessing;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,18 +18,18 @@ public class TextReader {
 
     Context context;
 
-    public TextReader(Context context){
+    public TextReader(Context context) {
         this.context = context;
     }
 
 
-    public float[][] scanCSV(){     //currently specified for an float[48000][2] array
+    public float[][] scanCSV(InputStream file, int length, int width) {     //currently specified for an float[48000][2] array
 
         InputStream is = null;
-        float[][] result = new float[48000*10][2];
+        float[][] result = new float[width][length];
 
 
-        is = context.getResources().openRawResource(R.raw.castanetes);
+        is = file;
 
 
         BufferedReader reader = null;
@@ -39,29 +40,29 @@ public class TextReader {
         try {
 
             int linecounter = 0;
-            while ((line = reader.readLine()) != null && linecounter < 48000*10) {
+            while ((line = reader.readLine()) != null && linecounter < length) {
                 st = new StringTokenizer(line, ",");
 
-
-
-                String nexNumber = st.nextToken();
-                double parsed =  Double.valueOf(nexNumber);
-                result[linecounter][0] = (float) parsed;
                 //your attributes
+                for (int i = 0; i < width; i++) {
 
-                nexNumber = st.nextToken();
-                parsed =  Double.valueOf(nexNumber);
-                result[linecounter][1] = (float) parsed;
+                    String nexNumber = st.nextToken();
+                    double parsed = Double.valueOf(nexNumber);
+//                    result[linecounter][i] = (float) parsed;
+                    result[i][linecounter] = (float) parsed;
 
-                if(st.countTokens() > 2){
-                    System.out.println("Some Tokens not read in line " + linecounter);
-                };
+                }
+
+//                if (st.countTokens() > 2) {
+//                    System.out.println("Some Tokens not read in line " + linecounter);
+//                }
+                ;
                 linecounter++;
             }
         } catch (IOException e) {
 
             e.printStackTrace();
         }
-        return  result;
+        return result;
     }
 }

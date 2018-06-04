@@ -1,8 +1,10 @@
 package com.example.johanna.audioprocessing.AudioOutput;
 import android.content.Context;
-import android.os.AsyncTask;
 
+import com.example.johanna.audioprocessing.AudioProcessing.RealtimeProcessingNaiv;
+import com.example.johanna.audioprocessing.R;
 import com.example.johanna.audioprocessing.TextReader;
+
 
 
 public class AudioOutput{
@@ -24,7 +26,11 @@ public class AudioOutput{
 
 
         }
-        audioThread = new AudioThread(this.getAudioSamples(), new float[0][0]); //TODO give files with filter
+        //TEST
+        (new RealtimeProcessingNaiv()).processNextFilter(this.getBaseAudioSamples(), this.getFilter(60));
+
+        audioThread = new AudioThread(this.getBaseAudioSamples(), this.getFilter(60));
+
     }
 
     public void startCurrentOutputThread(){
@@ -40,8 +46,14 @@ public class AudioOutput{
     }
 
 
-    private float[][] getAudioSamples(){
-        float[][] samples = (new TextReader(context)).scanCSV();
+    private float[][] getBaseAudioSamples(){
+        float[][] samples = (new TextReader(context)).scanCSV(context.getResources().openRawResource(R.raw.castanetes), 48000*10, 2 );
+        return  samples;
+    }
+
+    private float[][] getFilter(int degrees){
+        //TODO mangage for 360° directions
+        float[][] samples = (new TextReader(context)).scanCSV(context.getResources().openRawResource(R.raw.sixtydeg_hrir), 2400, 2 );
         return  samples;
     }
 

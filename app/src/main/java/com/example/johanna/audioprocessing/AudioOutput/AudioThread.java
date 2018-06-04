@@ -9,6 +9,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import java.lang.Math.*;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -109,8 +110,8 @@ public class AudioThread extends AsyncTask {
                 player.flush();
                 player.setNotificationMarkerPosition(player.getNotificationMarkerPosition()+48000*10-1);
 
-                player.write(firstCh, 0, audioFile.length, AudioTrack.WRITE_BLOCKING);
-                player.write(secondCh, 0, audioFile.length, AudioTrack.WRITE_BLOCKING);
+                player.write(firstCh, 0, audioFile[0].length, AudioTrack.WRITE_BLOCKING);
+                player.write(secondCh, 0, audioFile[0].length, AudioTrack.WRITE_BLOCKING);
                 System.out.println("Start audioOutput");
             }
             //playFinished.notify();
@@ -124,12 +125,23 @@ public class AudioThread extends AsyncTask {
     }
 
     private float[] getDimensionOf2dArray(float[][] array, int dimesion) {
-        float[] newArray = new float[array.length];
 
-        for (int i = 0; i < array.length; i++) {
-            newArray[i] = array[i][dimesion];
+        float[] newArray = new float[array[0].length];
+
+        for (int i = 0; i < array[0].length; i++) {
+            newArray[i] = array[dimesion][i];
         }
 
         return newArray;
+
+
+
+//        float[] newArray = new float[array.length];
+//
+//        for (int i = 0; i < array.length; i++) {
+//            newArray[i] = array[i][dimesion];
+//        }
+//
+//        return newArray;
     }
 }
